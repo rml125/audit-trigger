@@ -77,6 +77,9 @@ COMMENT ON COLUMN audit.logged_actions.row_data IS 'Record value. Null for state
 COMMENT ON COLUMN audit.logged_actions.changed_fields IS 'New values of fields changed by UPDATE. Null except for row-level UPDATE events.';
 COMMENT ON COLUMN audit.logged_actions.statement_only IS '''t'' if audit event is from an FOR EACH STATEMENT trigger, ''f'' for FOR EACH ROW';
 
+ALTER TABLE audit.logged_actions
+  ADD CONSTRAINT check_date CHECK (false) NO INHERIT;
+
 CREATE INDEX logged_actions_relid_idx ON audit.logged_actions(relid);
 CREATE INDEX logged_actions_action_tstamp_tx_stm_idx ON audit.logged_actions(action_tstamp_stm);
 CREATE INDEX logged_actions_action_idx ON audit.logged_actions(action);
@@ -89,6 +92,7 @@ DECLARE
     h_old hstore;
     h_new hstore;
     excluded_cols text[] = ARRAY[]::text[];
+	tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(current_date,'MMYYYY'));
 BEGIN
     IF TG_WHEN <> 'AFTER' THEN
         RAISE EXCEPTION 'audit.if_modified_func() may only run as an AFTER trigger';
@@ -138,7 +142,9 @@ BEGIN
         RAISE EXCEPTION '[audit.if_modified_func] - Trigger func added as trigger for unhandled case: %, %',TG_OP, TG_LEVEL;
         RETURN NULL;
     END IF;
-    INSERT INTO audit.logged_actions VALUES (audit_row.*);
+    
+	EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING audit_row;
+	
     RETURN NULL;
 END;
 $body$
@@ -239,3 +245,36 @@ $body$ LANGUAGE 'sql';
 COMMENT ON FUNCTION audit.audit_table(regclass) IS $body$
 Add auditing support to the given table. Row-level changes will be logged with full client query text. No cols are ignored.
 $body$;
+
+
+--GERANDO TABLE
+SELECT 
+'CREATE TABLE audit.logged_actions_01'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_02'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_03'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_04'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_05'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_06'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_07'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_08'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_09'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_10'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_11'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);'
+
+
+
+SELECT 
+'CREATE TABLE audit.logged_actions_012016 ( CHECK ( check_date >= DATE ''2016-01-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/01/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_022016 ( CHECK ( check_date >= DATE ''2016-02-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/02/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_032016 ( CHECK ( check_date >= DATE ''2016-03-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/03/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_042016 ( CHECK ( check_date >= DATE ''2016-04-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/04/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_052016 ( CHECK ( check_date >= DATE ''2016-05-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/05/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_062016 ( CHECK ( check_date >= DATE ''2016-06-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/06/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_072016 ( CHECK ( check_date >= DATE ''2016-07-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/07/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_082016 ( CHECK ( check_date >= DATE ''2016-08-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/08/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_092016 ( CHECK ( check_date >= DATE ''2016-09-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/09/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_102016 ( CHECK ( check_date >= DATE ''2016-10-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/10/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_112016 ( CHECK ( check_date >= DATE ''2016-11-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/11/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_122016 ( CHECK ( check_date >= DATE ''2016-12-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/12/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+';
