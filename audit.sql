@@ -266,15 +266,44 @@ CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHE
 
 SELECT 
 'ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/01/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/02/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/03/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/04/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/05/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/06/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/07/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/08/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/09/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/10/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/11/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
-ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/12/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-02-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/02/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-03-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/03/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-04-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/04/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-05-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/05/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-06-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/06/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-07-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/07/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-08-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/08/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-09-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/09/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-10-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/10/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-11-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/11/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-12-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/12/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
 ';
+
+--INDEXES
+CREATE INDEX "012016_action_tstamp_stm_idx" ON audit.logged_actions_012016 USING btree (action_tstamp_stm);
+CREATE INDEX "022016_action_tstamp_stm_idx" ON audit.logged_actions_022016 USING btree (action_tstamp_stm);
+CREATE INDEX "032016_action_tstamp_stm_idx" ON audit.logged_actions_032016 USING btree (action_tstamp_stm);
+CREATE INDEX "042016_action_tstamp_stm_idx" ON audit.logged_actions_042016 USING btree (action_tstamp_stm);
+CREATE INDEX "052016_action_tstamp_stm_idx" ON audit.logged_actions_052016 USING btree (action_tstamp_stm);
+CREATE INDEX "062016_action_tstamp_stm_idx" ON audit.logged_actions_062016 USING btree (action_tstamp_stm);
+CREATE INDEX "072016_action_tstamp_stm_idx" ON audit.logged_actions_072016 USING btree (action_tstamp_stm);
+CREATE INDEX "082016_action_tstamp_stm_idx" ON audit.logged_actions_082016 USING btree (action_tstamp_stm);
+CREATE INDEX "092016_action_tstamp_stm_idx" ON audit.logged_actions_092016 USING btree (action_tstamp_stm);
+CREATE INDEX "102016_action_tstamp_stm_idx" ON audit.logged_actions_102016 USING btree (action_tstamp_stm);
+CREATE INDEX "112016_action_tstamp_stm_idx" ON audit.logged_actions_112016 USING btree (action_tstamp_stm);
+CREATE INDEX "122016_action_tstamp_stm_idx" ON audit.logged_actions_122016 USING btree (action_tstamp_stm);
+
+
+--PRIMARY KEYS
+ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT logged_actions_012016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT logged_actions_022016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT logged_actions_032016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT logged_actions_042016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT logged_actions_052016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT logged_actions_062016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT logged_actions_072016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT logged_actions_082016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT logged_actions_092016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT logged_actions_102016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT logged_actions_112016_pkey PRIMARY KEY(event_id);
+ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT logged_actions_122016_pkey PRIMARY KEY(event_id);
