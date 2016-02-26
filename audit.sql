@@ -265,16 +265,16 @@ CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHE
 
 
 SELECT 
-'CREATE TABLE audit.logged_actions_012016 ( CHECK ( check_date >= DATE ''2016-01-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/01/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_022016 ( CHECK ( check_date >= DATE ''2016-02-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/02/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_032016 ( CHECK ( check_date >= DATE ''2016-03-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/03/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_042016 ( CHECK ( check_date >= DATE ''2016-04-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/04/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_052016 ( CHECK ( check_date >= DATE ''2016-05-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/05/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_062016 ( CHECK ( check_date >= DATE ''2016-06-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/06/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_072016 ( CHECK ( check_date >= DATE ''2016-07-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/07/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_082016 ( CHECK ( check_date >= DATE ''2016-08-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/08/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_092016 ( CHECK ( check_date >= DATE ''2016-09-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/09/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_102016 ( CHECK ( check_date >= DATE ''2016-10-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/10/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_112016 ( CHECK ( check_date >= DATE ''2016-11-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/11/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_122016 ( CHECK ( check_date >= DATE ''2016-12-01'' AND logdate < DATE '''||(date_trunc('MONTH', date('01/12/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' ) ) INHERITS (audit.logged_actions);
+'ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/01/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/02/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/03/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/04/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/05/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/06/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/07/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/08/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/09/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/10/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/11/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
+ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE '''||(date_trunc('MONTH', date('01/12/2016')) + INTERVAL '1 MONTH - 1 day')::date||''' );
 ';
