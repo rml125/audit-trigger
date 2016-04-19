@@ -362,3 +362,37 @@ ALTER TABLE audit.logged_actions_102016 DROP CONSTRAINT check_date;
 ALTER TABLE audit.logged_actions_112016 DROP CONSTRAINT check_date;
 ALTER TABLE audit.logged_actions_122016 DROP CONSTRAINT check_date;
 
+
+
+--Trigger de Migracao
+
+-- Function: audit.loaddata()
+
+-- DROP FUNCTION audit.loaddata();
+
+CREATE OR REPLACE FUNCTION audit.loaddata()
+  RETURNS trigger AS
+$BODY$
+DECLARE
+	tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(NEW.action_tstamp_stm,'MMYYYY'));
+BEGIN
+
+	--RAISE NOTICE 'DADOS: %', tablemonthpartition;
+	--RAISE NOTICE 'DADOS: %', NEW;
+	EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING NEW;
+	
+    RETURN NULL;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE SECURITY DEFINER
+  COST 100;
+ALTER FUNCTION audit.loaddata()
+  OWNER TO postgres;
+
+-- DROP TRIGGER "loadData" ON audit.logged_actions;
+
+CREATE TRIGGER "loadData"
+  BEFORE INSERT
+  ON audit.logged_actions
+  FOR EACH ROW
+  EXECUTE PROCEDURE audit.loaddata();
