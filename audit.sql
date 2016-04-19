@@ -247,7 +247,11 @@ Add auditing support to the given table. Row-level changes will be logged with f
 $body$;
 
 
---GERANDO TABLE
+------ATE AQUI OK! FIM PARTE 1
+
+
+
+--- GERANDO TABLES ANO ATUAL
 SELECT 
 'CREATE TABLE audit.logged_actions_01'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
 CREATE TABLE audit.logged_actions_02'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
@@ -260,10 +264,25 @@ CREATE TABLE audit.logged_actions_08'|| to_char(CURRENT_DATE,'YYYY') || '() INHE
 CREATE TABLE audit.logged_actions_09'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
 CREATE TABLE audit.logged_actions_10'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
 CREATE TABLE audit.logged_actions_11'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);'
+CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);';
+
+--- GERANDO TABLES ANO PASSADO
+SELECT 
+'CREATE TABLE audit.logged_actions_01'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_02'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_03'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_04'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_05'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_06'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_07'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_08'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_09'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_10'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_11'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_12'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);';
 
 
---CHECKS DATES
+--CHECKS DATES ANO ATUAL
 SELECT 
 '
 ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE ''2016-02-01'' );
@@ -279,6 +298,8 @@ ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT check_date CHECK ( action
 ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-11-01'' AND action_tstamp_stm < DATE ''2016-12-01'' );
 ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-12-01'' AND action_tstamp_stm < DATE ''2017-01-01'' );
 ';
+
+---PARTE 2  OK
 
 --INDEXES
 CREATE INDEX "012016_action_tstamp_stm_idx" ON audit.logged_actions_012016 USING btree (action_tstamp_stm);
@@ -308,6 +329,8 @@ ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT logged_actions_092016_pke
 ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT logged_actions_102016_pkey PRIMARY KEY(event_id);
 ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT logged_actions_112016_pkey PRIMARY KEY(event_id);
 ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT logged_actions_122016_pkey PRIMARY KEY(event_id);
+
+---PARTE 3  OK
 
 --INDEX POR DATAS
 
