@@ -80,9 +80,10 @@ COMMENT ON COLUMN audit.logged_actions.statement_only IS '''t'' if audit event i
 ALTER TABLE audit.logged_actions
   ADD CONSTRAINT check_date CHECK (false) NO INHERIT;
 
-CREATE INDEX logged_actions_relid_idx ON audit.logged_actions(relid);
-CREATE INDEX logged_actions_action_tstamp_tx_stm_idx ON audit.logged_actions(action_tstamp_stm);
-CREATE INDEX logged_actions_action_idx ON audit.logged_actions(action);
+--REVER DESEMPENHO DESATIVADO
+--CREATE INDEX logged_actions_relid_idx ON audit.logged_actions(relid);
+--CREATE INDEX logged_actions_action_tstamp_tx_stm_idx ON audit.logged_actions(action_tstamp_stm);
+--CREATE INDEX logged_actions_action_idx ON audit.logged_actions(action);
 
 CREATE OR REPLACE FUNCTION audit.if_modified_func() RETURNS TRIGGER AS $body$
 DECLARE
@@ -92,7 +93,7 @@ DECLARE
     h_old hstore;
     h_new hstore;
     excluded_cols text[] = ARRAY[]::text[];
-	tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(current_date,'MMYYYY'));
+    tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(current_date,'YYYYMM'));
 BEGIN
     IF TG_WHEN <> 'AFTER' THEN
         RAISE EXCEPTION 'audit.if_modified_func() may only run as an AFTER trigger';
@@ -143,8 +144,8 @@ BEGIN
         RETURN NULL;
     END IF;
     
-	EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING audit_row;
-	
+    EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING audit_row;
+    
     RETURN NULL;
 END;
 $body$
@@ -253,116 +254,120 @@ $body$;
 
 --- GERANDO TABLES ANO ATUAL
 SELECT 
-'CREATE TABLE audit.logged_actions_01'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_02'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_03'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_04'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_05'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_06'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_07'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_08'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_09'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_10'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_11'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_12'|| to_char(CURRENT_DATE,'YYYY') || '() INHERITS (audit.logged_actions);';
+'CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'01'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'02'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'03'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'04'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'05'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'06'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'07'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'08'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'09'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'10'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'11'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| to_char(CURRENT_DATE,'YYYY')||'12'|| '() INHERITS (audit.logged_actions);';
 
 --- GERANDO TABLES ANO PASSADO
 SELECT 
-'CREATE TABLE audit.logged_actions_01'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_02'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_03'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_04'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_05'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_06'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_07'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_08'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_09'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_10'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_11'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);
-CREATE TABLE audit.logged_actions_12'|| (to_char(CURRENT_DATE,'YYYY')::int-1) || '() INHERITS (audit.logged_actions);';
-
+'CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'01'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'02'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'03'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'04'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'05'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'06'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'07'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'08'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'09'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'10'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'11'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-1)||'12'|| '() INHERITS (audit.logged_actions);';
+--- GERANDO TABLES ANO PASSADO
+SELECT 
+'CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'01'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'02'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'03'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'04'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'05'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'06'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'07'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'08'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'09'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'10'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'11'|| '() INHERITS (audit.logged_actions);
+CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'12'|| '() INHERITS (audit.logged_actions);';
 
 --CHECKS DATES ANO ATUAL
 SELECT 
 '
-ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE ''2016-02-01'' );
-ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-02-01'' AND action_tstamp_stm < DATE ''2016-03-01'' );
-ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-03-01'' AND action_tstamp_stm < DATE ''2016-04-01'' );
-ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-04-01'' AND action_tstamp_stm < DATE ''2016-05-01'' );
-ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-05-01'' AND action_tstamp_stm < DATE ''2016-06-01'' );
-ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-06-01'' AND action_tstamp_stm < DATE ''2016-07-01'' );
-ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-07-01'' AND action_tstamp_stm < DATE ''2016-08-01'' );
-ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-08-01'' AND action_tstamp_stm < DATE ''2016-09-01'' );
-ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-09-01'' AND action_tstamp_stm < DATE ''2016-10-01'' );
-ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-10-01'' AND action_tstamp_stm < DATE ''2016-11-01'' );
-ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-11-01'' AND action_tstamp_stm < DATE ''2016-12-01'' );
-ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-12-01'' AND action_tstamp_stm < DATE ''2017-01-01'' );
+ALTER TABLE audit.logged_actions_201601 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-01-01'' AND action_tstamp_stm < DATE ''2016-02-01'' );
+ALTER TABLE audit.logged_actions_201602 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-02-01'' AND action_tstamp_stm < DATE ''2016-03-01'' );
+ALTER TABLE audit.logged_actions_201603 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-03-01'' AND action_tstamp_stm < DATE ''2016-04-01'' );
+ALTER TABLE audit.logged_actions_201604 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-04-01'' AND action_tstamp_stm < DATE ''2016-05-01'' );
+ALTER TABLE audit.logged_actions_201605 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-05-01'' AND action_tstamp_stm < DATE ''2016-06-01'' );
+ALTER TABLE audit.logged_actions_201606 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-06-01'' AND action_tstamp_stm < DATE ''2016-07-01'' );
+ALTER TABLE audit.logged_actions_201607 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-07-01'' AND action_tstamp_stm < DATE ''2016-08-01'' );
+ALTER TABLE audit.logged_actions_201608 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-08-01'' AND action_tstamp_stm < DATE ''2016-09-01'' );
+ALTER TABLE audit.logged_actions_201609 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-09-01'' AND action_tstamp_stm < DATE ''2016-10-01'' );
+ALTER TABLE audit.logged_actions_201610 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-10-01'' AND action_tstamp_stm < DATE ''2016-11-01'' );
+ALTER TABLE audit.logged_actions_201611 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-11-01'' AND action_tstamp_stm < DATE ''2016-12-01'' );
+ALTER TABLE audit.logged_actions_201612 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-12-01'' AND action_tstamp_stm < DATE ''2017-01-01'' );
 ';
 
----PARTE 2  OK
+---
+--- INDEXES
+---
 
---INDEXES
-CREATE INDEX "012016_action_tstamp_stm_idx" ON audit.logged_actions_012016 USING btree (action_tstamp_stm);
-CREATE INDEX "022016_action_tstamp_stm_idx" ON audit.logged_actions_022016 USING btree (action_tstamp_stm);
-CREATE INDEX "032016_action_tstamp_stm_idx" ON audit.logged_actions_032016 USING btree (action_tstamp_stm);
-CREATE INDEX "042016_action_tstamp_stm_idx" ON audit.logged_actions_042016 USING btree (action_tstamp_stm);
-CREATE INDEX "052016_action_tstamp_stm_idx" ON audit.logged_actions_052016 USING btree (action_tstamp_stm);
-CREATE INDEX "062016_action_tstamp_stm_idx" ON audit.logged_actions_062016 USING btree (action_tstamp_stm);
-CREATE INDEX "072016_action_tstamp_stm_idx" ON audit.logged_actions_072016 USING btree (action_tstamp_stm);
-CREATE INDEX "082016_action_tstamp_stm_idx" ON audit.logged_actions_082016 USING btree (action_tstamp_stm);
-CREATE INDEX "092016_action_tstamp_stm_idx" ON audit.logged_actions_092016 USING btree (action_tstamp_stm);
-CREATE INDEX "102016_action_tstamp_stm_idx" ON audit.logged_actions_102016 USING btree (action_tstamp_stm);
-CREATE INDEX "112016_action_tstamp_stm_idx" ON audit.logged_actions_112016 USING btree (action_tstamp_stm);
-CREATE INDEX "122016_action_tstamp_stm_idx" ON audit.logged_actions_122016 USING btree (action_tstamp_stm);
+--PRIMARY KEYS OK! EVENT_ID
+SELECT 'ALTER TABLE '||table_schema||'.'||table_name||' ADD CONSTRAINT ' ||table_name|| '_pkey PRIMARY KEY(event_id);'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
 
+--INDEX TABELAS :: COLUNA session_user_name
+SELECT 'CREATE INDEX '|| table_name ||'_session_user_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (session_user_name COLLATE pg_catalog."default");'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name
 
---PRIMARY KEYS
-ALTER TABLE audit.logged_actions_012016 ADD CONSTRAINT logged_actions_012016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_022016 ADD CONSTRAINT logged_actions_022016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_032016 ADD CONSTRAINT logged_actions_032016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_042016 ADD CONSTRAINT logged_actions_042016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_052016 ADD CONSTRAINT logged_actions_052016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_062016 ADD CONSTRAINT logged_actions_062016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_072016 ADD CONSTRAINT logged_actions_072016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_082016 ADD CONSTRAINT logged_actions_082016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_092016 ADD CONSTRAINT logged_actions_092016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_102016 ADD CONSTRAINT logged_actions_102016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_112016 ADD CONSTRAINT logged_actions_112016_pkey PRIMARY KEY(event_id);
-ALTER TABLE audit.logged_actions_122016 ADD CONSTRAINT logged_actions_122016_pkey PRIMARY KEY(event_id);
+--INDEX TRANSACTION ID
+SELECT 'CREATE INDEX '|| table_name ||'_transaction_id_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (transaction_id ASC NULLS LAST);'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name
 
----PARTE 3  OK
+--INDEX ACTION
+SELECT 'CREATE INDEX '|| table_name ||'_action_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (action ASC NULLS LAST);'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
 
 --INDEX POR DATAS
+SELECT 'CREATE INDEX '|| table_name ||'_data_tstamp_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (date(timezone(''UTC''::text, action_tstamp_stm)));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
+--INDEX POR NOME TABELAS
+SELECT 'CREATE INDEX '|| table_name ||'_table_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (table_name COLLATE pg_catalog."default");'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
+--HSTORE PRINCIPAIS INDEX
+SELECT 'CREATE INDEX '|| table_name ||'_usuario_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''usuario_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
+SELECT 'CREATE INDEX '|| table_name ||'_pessoa_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''pessoa_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
+SELECT 'CREATE INDEX '|| table_name ||'_art_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''art_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
+SELECT 'CREATE INDEX '|| table_name ||'_boleto_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''boleto_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
 
 
-CREATE INDEX logged_actions_012016_date ON audit.logged_actions_012016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_022016_date ON audit.logged_actions_022016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_032016_date ON audit.logged_actions_032016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_042016_date ON audit.logged_actions_042016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_052016_date ON audit.logged_actions_052016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_062016_date ON audit.logged_actions_062016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_072016_date ON audit.logged_actions_072016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_082016_date ON audit.logged_actions_082016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_092016_date ON audit.logged_actions_092016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_102016_date ON audit.logged_actions_102016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_112016_date ON audit.logged_actions_112016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-CREATE INDEX logged_actions_122016_date ON audit.logged_actions_122016 ( date(action_tstamp_stm AT TIME ZONE 'UTC') );
-
---DROP
-ALTER TABLE audit.logged_actions_012016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_022016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_032016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_042016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_052016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_062016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_072016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_082016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_092016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_102016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_112016 DROP CONSTRAINT check_date;
-ALTER TABLE audit.logged_actions_122016 DROP CONSTRAINT check_date;
-
-
+--
+-- MIGRACAO RECEBER CARGA E DISTRIBUIR PELAS TABELAS
+--
 
 --Trigger de Migracao
 
@@ -374,13 +379,13 @@ CREATE OR REPLACE FUNCTION audit.loaddata()
   RETURNS trigger AS
 $BODY$
 DECLARE
-	tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(NEW.action_tstamp_stm,'MMYYYY'));
+    tablemonthpartition varchar = 'audit.logged_actions_'||(SELECT to_char(NEW.action_tstamp_stm,'YYYYMM'));
 BEGIN
 
-	--RAISE NOTICE 'DADOS: %', tablemonthpartition;
-	--RAISE NOTICE 'DADOS: %', NEW;
-	EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING NEW;
-	
+    --RAISE NOTICE 'DADOS: %', tablemonthpartition;
+    --RAISE NOTICE 'DADOS: %', NEW;
+    EXECUTE format('INSERT INTO %s SELECT ($1).*',tablemonthpartition) USING NEW;
+    
     RETURN NULL;
 END;
 $BODY$
