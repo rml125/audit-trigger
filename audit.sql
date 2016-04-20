@@ -248,8 +248,7 @@ Add auditing support to the given table. Row-level changes will be logged with f
 $body$;
 
 
-------ATE AQUI OK! FIM PARTE 1
-
+------FIM PARTE 1
 
 
 --- GERANDO TABLES ANO ATUAL
@@ -296,6 +295,8 @@ CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'10
 CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'11'|| '() INHERITS (audit.logged_actions);
 CREATE TABLE audit.logged_actions_'|| (to_char(CURRENT_DATE,'YYYY')::int-2)||'12'|| '() INHERITS (audit.logged_actions);';
 
+------FIM PARTE 2
+
 --CHECKS DATES ANO ATUAL
 SELECT 
 '
@@ -313,8 +314,11 @@ ALTER TABLE audit.logged_actions_201611 ADD CONSTRAINT check_date CHECK ( action
 ALTER TABLE audit.logged_actions_201612 ADD CONSTRAINT check_date CHECK ( action_tstamp_stm >= DATE ''2016-12-01'' AND action_tstamp_stm < DATE ''2017-01-01'' );
 ';
 
+------FIM PARTE 3
+
 ---
 --- INDEXES
+--- !!!SE FOR CARREGAR A TABELAS CRIAR OS INDEXES APENAS DEPOIS
 ---
 
 --PRIMARY KEYS OK! EVENT_ID
@@ -364,6 +368,8 @@ SELECT 'CREATE INDEX '|| table_name ||'_boleto_id_idx ON ' ||table_schema||'.'||
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
 ORDER BY table_name;
 
+
+------FIM PARTE 4
 
 --
 -- MIGRACAO RECEBER CARGA E DISTRIBUIR PELAS TABELAS
