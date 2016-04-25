@@ -351,6 +351,11 @@ SELECT 'CREATE INDEX '|| table_name ||'_table_name_idx ON ' ||table_schema||'.'|
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
 ORDER BY table_name;
 
+--INDEX POR NOME SCHEMA
+SELECT 'CREATE INDEX '|| table_name ||'_schema_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (schema_name COLLATE pg_catalog."default");'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+ORDER BY table_name;
+
 --HSTORE PRINCIPAIS INDEX
 SELECT 'CREATE INDEX '|| table_name ||'_usuario_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''usuario_id''));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
