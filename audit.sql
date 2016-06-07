@@ -80,10 +80,6 @@ COMMENT ON COLUMN audit.logged_actions.statement_only IS '''t'' if audit event i
 ALTER TABLE audit.logged_actions
   ADD CONSTRAINT check_date CHECK (false) NO INHERIT;
 
---REVER DESEMPENHO DESATIVADO
---CREATE INDEX logged_actions_relid_idx ON audit.logged_actions(relid);
---CREATE INDEX logged_actions_action_tstamp_tx_stm_idx ON audit.logged_actions(action_tstamp_stm);
---CREATE INDEX logged_actions_action_idx ON audit.logged_actions(action);
 
 CREATE OR REPLACE FUNCTION audit.if_modified_func() RETURNS TRIGGER AS $body$
 DECLARE
@@ -324,54 +320,65 @@ ALTER TABLE audit.logged_actions_201612 ADD CONSTRAINT check_date CHECK ( action
 --PRIMARY KEYS OK! EVENT_ID
 SELECT 'ALTER TABLE '||table_schema||'.'||table_name||' ADD CONSTRAINT ' ||table_name|| '_pkey PRIMARY KEY(event_id);'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
 
+UNION
 --INDEX TABELAS :: COLUNA session_user_name
 SELECT 'CREATE INDEX '|| table_name ||'_session_user_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (session_user_name COLLATE pg_catalog."default");'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name
-
+UNION
 --INDEX TRANSACTION ID
 SELECT 'CREATE INDEX '|| table_name ||'_transaction_id_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (transaction_id ASC NULLS LAST);'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name
-
+UNION
 --INDEX ACTION
 SELECT 'CREATE INDEX '|| table_name ||'_action_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (action ASC NULLS LAST);'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
-
+UNION
 --INDEX POR DATAS
 SELECT 'CREATE INDEX '|| table_name ||'_data_tstamp_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (date(timezone(''UTC''::text, action_tstamp_stm)));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
-
+UNION
 --INDEX POR NOME TABELAS
 SELECT 'CREATE INDEX '|| table_name ||'_table_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (table_name COLLATE pg_catalog."default");'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
-
+UNION
 --INDEX POR NOME SCHEMA
 SELECT 'CREATE INDEX '|| table_name ||'_schema_name_idx ON ' ||table_schema||'.'||table_name|| ' USING btree (schema_name COLLATE pg_catalog."default");'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
+	
 
 --HSTORE PRINCIPAIS INDEX
 SELECT 'CREATE INDEX '|| table_name ||'_usuario_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''usuario_id''));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
 
+UNION
 SELECT 'CREATE INDEX '|| table_name ||'_pessoa_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''pessoa_id''));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
 
+UNION
 SELECT 'CREATE INDEX '|| table_name ||'_art_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''art_id''));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
 
+UNION
 SELECT 'CREATE INDEX '|| table_name ||'_boleto_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''boleto_id''));'
 from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
-ORDER BY table_name;
+
+UNION
+SELECT 'CREATE INDEX '|| table_name ||'_certidao_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''certidao_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+UNION
+SELECT 'CREATE INDEX '|| table_name ||'_empresa_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''empresa_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+UNION
+SELECT 'CREATE INDEX '|| table_name ||'_profissional_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''profissional_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+UNION
+SELECT 'CREATE INDEX '|| table_name ||'_row_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+UNION
+SELECT 'CREATE INDEX '|| table_name ||'_profissional_registro_id_idx ON ' ||table_schema||'.'||table_name|| ' USING BTREE ((row_data->''registro_id''));'
+from information_schema.tables where table_schema IN ('audit') and table_name ilike 'logged_actions_%'
+
 
 
 ------FIM PARTE 4
